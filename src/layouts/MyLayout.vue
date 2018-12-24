@@ -26,7 +26,7 @@
 
     </q-layout-header>
 
-    <q-layout-footer reveal :reveal-offset="1">
+    <q-layout-footer reveal class="bg-dark disabled" :reveal-offset="1">
       <portal-target name="footer">
       </portal-target>
     </q-layout-footer>

@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <portal to="footer">
-      <div class="q-pa-sm"><q-slider :min="1" @input="changePage()" :max="gallery.num_pages" v-model="page" :step="1" label color="primary" /></div>
+      <div class="q-pa-sm"><q-slider :min="1" @change="changePage" :max="gallery.num_pages" :value="page" :step="1" label color="primary" /></div>
     </portal>
     <template v-if="gallery">
       <div v-if="!loadPlaceHolders" class="row justify-center q-pa-md">
@@ -49,7 +49,11 @@ export default {
         }
       }
     },
-    changePage () {
+    changePage (newPage = null) {
+      console.log('new page', newPage)
+      if (newPage) {
+        this.page = newPage
+      }
       console.log('change page')
       window.scrollTo(0, 0)
       this.updateCurrentPageURL()
