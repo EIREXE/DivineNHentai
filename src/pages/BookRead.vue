@@ -1,6 +1,9 @@
 <template>
   <q-page>
     <template v-if="gallery">
+      <div class="row justify-center q-pa-md">
+        <q-pagination v-model="page" :max="gallery.num_pages" :max-pages="6"/>
+      </div>
       <div class="row justify-center q-pa-none">
         <img @click="imgClick" ref="img" class="page" :src="$nh.getPage(parseInt(gallery.media_id), page)" alt="">
       </div>
@@ -27,10 +30,12 @@ export default {
       if (event.layerX < this.$refs.img.getBoundingClientRect().width / 2) {
         if (this.page > 1) {
           this.page--
+          window.scrollTo(0, 0)
         }
       } else {
         if (this.page < this.gallery.num_pages) {
           this.page++
+          window.scrollTo(0, 0)
         }
       }
     },
