@@ -1,27 +1,35 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-layout-header>
-      <q-toolbar
-        color="primary">
-        <q-btn
-          flat
-          dense
-          round
-          @click="leftDrawerOpen = !leftDrawerOpen"
-          aria-label="Menu"
-        >
-          <q-icon name="menu" />
-        </q-btn>
+    <q-layout-header reveal :reveal-offset="1">
+      <portal-target name="toolbar">
+        <q-toolbar
+          color="primary">
+          <q-btn
+            flat
+            dense
+            round
+            @click="leftDrawerOpen = !leftDrawerOpen"
+            aria-label="Menu"
+          >
+            <q-icon name="menu" />
+          </q-btn>
 
-        <q-toolbar-title>
-          <portal-target name="title">
-            Divine
+          <q-toolbar-title>
+            <portal-target name="title">
+              Divine
+            </portal-target>
+          </q-toolbar-title>
+          <portal-target name="toolbar-buttons">
           </portal-target>
-        </q-toolbar-title>
-        <portal-target name="toolbar-buttons">
-        </portal-target>
-      </q-toolbar>
+        </q-toolbar>
+      </portal-target>
+
     </q-layout-header>
+
+    <q-layout-footer reveal :reveal-offset="1">
+      <portal-target name="footer">
+      </portal-target>
+    </q-layout-footer>
 
     <q-layout-drawer
       v-model="leftDrawerOpen"

@@ -1,17 +1,14 @@
 <template>
   <q-page>
+    <portal to="footer">
+      <div class="q-pa-sm"><q-slider :min="1" @input="changePage()" :max="gallery.num_pages" v-model="page" :step="1" label color="primary" /></div>
+    </portal>
     <template v-if="gallery">
-      <div class="row justify-center q-pa-md">
-        <q-pagination v-model="page" @input="changePage()" :max="gallery.num_pages" :max-pages="6"/>
-      </div>
       <div v-if="!loadPlaceHolders" class="row justify-center q-pa-md">
         <q-spinner slot="message" :size="40"></q-spinner>
       </div>
       <div class="row justify-center q-pa-none">
         <img  @click="imgClick" ref="img" class="page" :src="currentPageURL" @load="onImageLoaded()" alt=""/>
-      </div>
-      <div class="row justify-center q-pa-md">
-        <q-pagination v-model="page" @input="changePage()" :max="gallery.num_pages" :max-pages="6"/>
       </div>
     </template>
   <image-preloader v-if="loadPlaceHolders" v-for="p in getPagesToPreload()" :key="p" :src="p"/>
