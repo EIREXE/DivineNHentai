@@ -10,7 +10,8 @@ module.exports = function (ctx) {
       'portals',
       'global',
       'imagePreload',
-      'progressiveImage'
+      'progressiveImage',
+      'nativeHTTP'
     ],
     css: [
       'app.styl'

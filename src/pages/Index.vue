@@ -25,7 +25,7 @@ export default {
     },
     loadMore (index, done) {
       this.page++
-      this.$axios.get(`https://cors.io/?https://nhentai.net/api/galleries/all?page=${this.page}`).then((response) => {
+      this.$nhttp.get(`https://nhentai.net/api/galleries/all?page=${this.page}`).then((response) => {
         this.results = this.results.concat(response.data.result)
         done()
       })

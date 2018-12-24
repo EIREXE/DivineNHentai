@@ -22,7 +22,7 @@ export default {
   },
   created () {
     console.log(this.$route.params.id)
-    this.$axios.get(`https://cors.io/?https://nhentai.net/api/gallery/${this.$route.params.id}`).then((response) => {
+    this.$nhttp.get(`https://nhentai.net/api/gallery/${this.$route.params.id}`).then((response) => {
       this.gallery = response.data
     })
   }
