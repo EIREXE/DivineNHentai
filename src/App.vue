@@ -11,4 +11,8 @@ export default {
 </script>
 
 <style>
+a {
+  color: currentColor;
+  text-decoration: none; /* no underline */
+}
 </style>

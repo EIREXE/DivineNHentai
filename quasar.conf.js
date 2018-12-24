@@ -5,7 +5,10 @@ module.exports = function (ctx) {
     // app plugins (/src/plugins)
     plugins: [
       'i18n',
-      'axios'
+      'axios',
+      'nhentai',
+      'portals',
+      'global'
     ],
     css: [
       'app.styl'
@@ -49,20 +52,36 @@ module.exports = function (ctx) {
         'QPage',
         'QToolbar',
         'QToolbarTitle',
+        'QPagination',
+        'QInfiniteScroll',
         'QBtn',
         'QIcon',
         'QList',
         'QListHeader',
         'QItem',
         'QItemMain',
-        'QItemSide'
+        'QItemSide',
+        'QCard',
+        'QCardTitle',
+        'QCardMain',
+        'QCardMedia',
+        'QCardSeparator',
+        'QCardActions',
+        'QParallax',
+        'QItemSeparator',
+        'QInput',
+        'QField',
+        'QChip',
+        'QSpinner',
+        'QPullToRefresh'
       ],
       directives: [
         'Ripple'
       ],
       // Quasar plugins
       plugins: [
-        'Notify'
+        'Notify',
+        'Dialog'
       ]
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
       // i18n: 'de' // Quasar language
