@@ -21,6 +21,10 @@
             <uses-permission android:name="android.permissions.NETWORK_ACCESS" />
             <uses-permission android:name="android.permissions.ACCESS_NETWORK_STATE" />
         </config-file>
+        <icon density="ldpi" src="res/icon/android/icon-36-ldpi.png" />
+        <icon density="mdpi" src="res/icon/android/icon-48-mdpi.png" />
+        <icon density="hdpi" src="res/icon/android/icon-72-hdpi.png" />
+        <icon density="xhdpi" src="res/icon/android/icon-96-xhdpi.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -29,7 +33,7 @@
     <preference name="android-minSdkVersion" value="22" />
     <preference name="android-targetSdkVersion" value="22" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
-    <engine name="android" spec="^7.1.4" />
     <plugin name="cordova-custom-config" spec="^5.0.2" />
     <plugin name="cordova-plugin-advanced-http" spec="^2.0.2" />
+    <engine name="android" spec="^7.1.4" />
 </widget>
