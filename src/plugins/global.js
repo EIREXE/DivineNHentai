@@ -1,4 +1,6 @@
+import BookGrid from 'pages/BookGrid'
 export default ({ Vue }) => {
+  Vue.component('BookGrid', BookGrid)
   Vue.prototype.$divineSearch = function promptSearch (text = '') {
     console.log(this)
     this.$q.dialog({

@@ -16,7 +16,8 @@
     "portal-vue": "^1.5.0",
     "vue-i18n": "^7.3.3",
     "vue-image-preloader": "^0.2.8",
-    "vue-progressive-image": "^3.2.0"
+    "vue-progressive-image": "^3.2.0",
+    "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",

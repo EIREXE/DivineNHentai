@@ -20,7 +20,7 @@
 
 <script>
 import { debounce } from 'quasar'
-
+import { mapActions } from 'vuex'
 export default {
   name: 'BookRead',
   data () {
@@ -32,9 +32,13 @@ export default {
   },
   created () {
     this.updateCurrentPageURL()
+    this.addBookToHistory(this.gallery)
   },
   props: ['gallery'],
   methods: {
+    ...mapActions('userData', [
+      'addBookToHistory'
+    ]),
     imgClick (event) {
       if (event.layerX < this.$refs.img.getBoundingClientRect().width / 2) {
         if (this.page > 1) {

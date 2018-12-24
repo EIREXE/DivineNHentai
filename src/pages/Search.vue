@@ -12,22 +12,7 @@
         <q-btn flat round icon="edit" @click="$divineSearch(getQuery())"/>
     </portal>
     <q-pull-to-refresh :handler="refresh">
-      <q-page padding class="row">
-        <div v-for="result in results" :key="result.id" class="col-xs-6 col-sm-3 q-pa-sm">
-          <router-link :to="{name: 'book_info', params: {id: result.id}}">
-          <q-card>
-            <q-card-media>
-              <img :src="$nh.getThumbnail(result)" class="thumbnail" alt="">
-            </q-card-media>
-            <q-card-title class="q-pa-sm">
-              <p class="card-title q-subheading q-ma-none"><img :src="$nh.getFlagForLanguage($nh.getLanguage(result))" class="flag"> {{ result.title.english }}</p>
-            </q-card-title>
-            <q-card-separator />
-
-          </q-card>
-          </router-link>
-        </div>
-      </q-page>
+      <BookGrid :books="results"></BookGrid>
     </q-pull-to-refresh>
     <div class="row justify-center q-pa-md">
       <q-spinner slot="message" :size="40"></q-spinner>

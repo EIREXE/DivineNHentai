@@ -23,6 +23,6 @@
     </platform>
     <preference name="android-minSdkVersion" value="22" />
     <preference name="android-targetSdkVersion" value="22" />
-    <engine name="android" spec="^7.1.4" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
+    <engine name="android" spec="^7.1.4" />
 </widget>

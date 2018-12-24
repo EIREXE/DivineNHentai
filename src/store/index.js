@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import example from './module-example'
-
+import userData from './user-data'
+import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
 
 /*
@@ -13,8 +13,9 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      example
-    }
+      userData
+    },
+    plugins: [createPersistedState()]
   })
 
   return Store

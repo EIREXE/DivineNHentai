@@ -4,6 +4,8 @@ const routes = [
     component: () => import('layouts/MyLayout.vue'),
     children: [
       { path: '', name: 'index', component: () => import('pages/Index.vue') },
+      { path: 'history', name: 'history', component: () => import('pages/BookHistory.vue') },
+      { path: 'favorites', name: 'favorites', component: () => import('pages/FavoriteBooks.vue') },
       { path: 'search/:query', name: 'search', props: true, component: () => import('pages/Search.vue') },
       {
         path: '/book/:id',

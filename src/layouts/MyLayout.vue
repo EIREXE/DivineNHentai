@@ -40,6 +40,14 @@
           <q-item-side icon="search" />
           <q-item-main label="Search" />
         </q-item>
+        <q-item exact :to="{ name: 'history' }">
+          <q-item-side icon="history" />
+          <q-item-main label="History" />
+        </q-item>
+        <q-item exact :to="{ name: 'favorites' }">
+          <q-item-side icon="favorite" />
+          <q-item-main label="Favorites" />
+        </q-item>
       </q-list>
     </q-layout-drawer>
 
