@@ -2,27 +2,36 @@
   <q-page>
     <template v-if="gallery">
       <div class="row justify-center q-pa-md">
-        <q-pagination v-model="page" :max="gallery.num_pages" :max-pages="6"/>
+        <q-pagination v-model="page" @input="changePage()" :max="gallery.num_pages" :max-pages="6"/>
+      </div>
+      <div v-if="!loadPlaceHolders" class="row justify-center q-pa-md">
+        <q-spinner slot="message" :size="40"></q-spinner>
       </div>
       <div class="row justify-center q-pa-none">
-        <img @click="imgClick" ref="img" class="page" :src="$nh.getPage(parseInt(gallery.media_id), page)" alt="">
+        <img  @click="imgClick" ref="img" class="page" :src="currentPageURL" @load="onImageLoaded()" alt=""/>
       </div>
       <div class="row justify-center q-pa-md">
-        <q-pagination v-model="page" :max="gallery.num_pages" :max-pages="6"/>
+        <q-pagination v-model="page" @input="changePage()" :max="gallery.num_pages" :max-pages="6"/>
       </div>
     </template>
-  <image-preloader v-for="p in getPagesToPreload()" :key="p" :src="p"/>
+  <image-preloader v-if="loadPlaceHolders" v-for="p in getPagesToPreload()" :key="p" :src="p"/>
   </q-page>
 </template>
 
 <script>
+import { debounce } from 'quasar'
 
 export default {
-  name: 'PageAbout',
+  name: 'BookRead',
   data () {
     return {
-      page: 1
+      page: 1,
+      loadPlaceHolders: false,
+      currentPageURL: ''
     }
+  },
+  created () {
+    this.updateCurrentPageURL()
   },
   props: ['gallery'],
   methods: {
@@ -30,14 +39,28 @@ export default {
       if (event.layerX < this.$refs.img.getBoundingClientRect().width / 2) {
         if (this.page > 1) {
           this.page--
-          window.scrollTo(0, 0)
+          this.changePage()
         }
       } else {
         if (this.page < this.gallery.num_pages) {
           this.page++
-          window.scrollTo(0, 0)
+          this.changePage()
         }
       }
+    },
+    changePage () {
+      console.log('change page')
+      window.scrollTo(0, 0)
+      this.updateCurrentPageURL()
+    },
+    updateCurrentPageURL: debounce(function () {
+      this.currentPageURL = this.$nh.getPage(parseInt(this.gallery.media_id), this.page)
+      console.log('url', this.currentPageURL)
+      this.loadPlaceHolders = false
+    }, 500),
+    onImageLoaded () {
+      console.log('image loaded, loading placeholders...')
+      this.loadPlaceHolders = true
     },
     getPagesToPreload () {
       const pages = []

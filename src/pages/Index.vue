@@ -22,7 +22,9 @@
           slot="message" for DOM element to display (in this example
           a dots spinner) when loading additional content
         -->
-        <q-spinner-dots slot="message" :size="40"></q-spinner-dots>
+        <div class="row justify-center q-pa-md">
+          <q-spinner slot="message" :size="40"></q-spinner>
+        </div>
       </q-page>
     </q-pull-to-refresh>
     </q-infinite-scroll>

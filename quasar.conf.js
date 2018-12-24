@@ -9,7 +9,8 @@ module.exports = function (ctx) {
       'nhentai',
       'portals',
       'global',
-      'imagePreload'
+      'imagePreload',
+      'progressiveImage'
     ],
     css: [
       'app.styl'
