@@ -13,7 +13,6 @@
     </portal>
     <q-pull-to-refresh :handler="refresh">
       <q-page padding class="row">
-        <!-- Content, in this case some <p> tags -->
         <div v-for="result in results" :key="result.id" class="col-xs-6 col-sm-3 q-pa-sm">
           <router-link :to="{name: 'book_info', params: {id: result.id}}">
           <q-card>

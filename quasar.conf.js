@@ -8,7 +8,8 @@ module.exports = function (ctx) {
       'axios',
       'nhentai',
       'portals',
-      'global'
+      'global',
+      'imagePreload'
     ],
     css: [
       'app.styl'
