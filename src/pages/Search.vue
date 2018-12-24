@@ -14,7 +14,7 @@
     <q-pull-to-refresh :handler="refresh">
       <q-page padding class="row">
         <!-- Content, in this case some <p> tags -->
-        <div v-for="result in results" :key="result.id" class="col-6 q-pa-sm">
+        <div v-for="result in results" :key="result.id" class="col-xs-6 col-sm-3 q-pa-sm">
           <router-link :to="{name: 'book_info', params: {id: result.id}}">
           <q-card>
             <q-card-media>
@@ -47,8 +47,10 @@ export default {
       isTagged: false
     }
   },
-  created () {
-    this.isTagged = this.$route.query.tagged === 'true'
+  watch: {
+    '$route' (to, from) {
+      this.refresh()
+    }
   },
   methods: {
     refresh (done) {
@@ -64,6 +66,7 @@ export default {
       }
     },
     loadMore (index, done) {
+      this.isTagged = this.$route.query.tagged === 'true'
       this.page++
       let searchType = 'search'
       let query = `?query=${this.$route.params.query}`
