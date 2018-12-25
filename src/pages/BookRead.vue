@@ -22,7 +22,7 @@ export default {
   name: 'BookRead',
   data () {
     return {
-      page: 1,
+      page: this.$route.query.initialPage || 1,
       loadPlaceHolders: false,
       currentPageURL: ''
     }

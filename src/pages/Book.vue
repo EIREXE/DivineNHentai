@@ -22,6 +22,18 @@
       </q-card-title>
       <q-card-separator></q-card-separator>
       <q-card-main>
+        <q-field label="Preview" orientation="vertical">
+          <div class="related-books">
+            <div class="row no-wrap">
+              <router-link v-for="page in gallery.num_pages" :key="page" :to="{ name: 'book_read', query: { initialPage: page } }">
+                <img class="q-pa-sm" :src="$nh.getPageThumb(gallery, page)" alt="">
+              </router-link>
+            </div>
+          </div>
+        </q-field>
+      </q-card-main>
+      <q-card-separator></q-card-separator>
+      <q-card-main>
         <q-field dark v-for="(tagLabel, tagTypeName) in tagTypes" v-if="$nh.getTagsOfType(gallery, tagTypeName).length > 0" label-width="3" :key="tagTypeName" :label="tagLabel + ':'" orientation="horizontal">
           <div class="row gutter-xs justify-left">
             <div class="tag-field" v-for="tag in $nh.getTagsOfType(gallery, tagTypeName)" :key="tag.name" v-if="tag.type === tagTypeName">
@@ -31,12 +43,12 @@
             </div>
           </div>
         </q-field>
-        <q-field label="Related">
-          <q-scroll-area>
-            <div class="row">
+        <q-field label="Related" orientation="vertical">
+          <div class="related-books">
+            <div class="row no-wrap">
               <BookCard v-for="book in related" :key="book.id" class="col-xs-6 col-sm-3 q-pa-sm" :book="book"/>
             </div>
-          </q-scroll-area>
+          </div>
         </q-field>
       </q-card-main>
     </q-card>
@@ -90,7 +102,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .page {
   width: 100%;
   height: 100%;
@@ -98,5 +110,9 @@ export default {
 
 .tag-field:empty {
   display: none;
+}
+
+.related-books {
+  overflow-y: scroll;
 }
 </style>
