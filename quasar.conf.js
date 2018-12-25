@@ -83,7 +83,8 @@ module.exports = function (ctx) {
         'QCheckbox',
         'QItemTile',
         'QBtnDropdown',
-        'QPopover'
+        'QPopover',
+        'QScrollArea'
       ],
       directives: [
         'Ripple'

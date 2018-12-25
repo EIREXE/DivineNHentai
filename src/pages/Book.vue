@@ -31,6 +31,13 @@
             </div>
           </div>
         </q-field>
+        <q-field label="Related">
+          <q-scroll-area>
+            <div class="row">
+              <BookCard v-for="book in related" :key="book.id" class="col-xs-6 col-sm-3 q-pa-sm" :book="book"/>
+            </div>
+          </q-scroll-area>
+        </q-field>
       </q-card-main>
     </q-card>
   </q-page>
@@ -44,6 +51,7 @@ export default {
   data () {
     return {
       page: 1,
+      related: [],
       tagTypes: {
         parody: 'Parodies',
         character: 'Characters',
@@ -55,6 +63,13 @@ export default {
     }
   },
   props: ['gallery'],
+  created () {
+    console.log('related', this.$nh.getRelatedBooks(this.gallery))
+    this.$nhttp.get(this.$nh.getRelatedBooks(this.gallery)).then((result) => {
+      console.log(result.data.result)
+      this.related = result.data.result
+    })
+  },
   computed: {
     ...mapState({
       favoriteBooks: state => state.userData.favoriteBooks
