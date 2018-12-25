@@ -2,7 +2,7 @@
   <q-page padding class="row">
     <div v-for="book in books" :key="book.id" class="col-xs-6 col-sm-3 q-pa-sm">
       <router-link :to="{name: 'book_info', params: {id: book.id}}">
-      <q-card>
+      <q-card :color="$divineIsDark() ? 'dark' : null">
         <q-card-media>
           <img :src="$nh.getThumbnail(book)" class="thumbnail" alt="">
         </q-card-media>

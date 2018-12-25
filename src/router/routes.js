@@ -7,6 +7,8 @@ const routes = [
       { path: 'history', name: 'history', component: () => import('pages/BookHistory.vue') },
       { path: 'favorites', name: 'favorites', component: () => import('pages/FavoriteBooks.vue') },
       { path: 'search/:query', name: 'search', props: true, component: () => import('pages/Search.vue') },
+      { path: 'settings', name: 'settings', component: () => import('pages/Settings.vue') },
+
       {
         path: '/book/:id',
         name: 'book',

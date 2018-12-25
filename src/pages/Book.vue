@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-card>
+    <q-card :color="$divineIsDark() ? 'dark' : null">
       <router-link :to="{ name: 'book_read', params: { id: gallery.id } }">
         <q-card-media>
           <q-parallax :src="$nh.getCover(gallery)" :height="300">
@@ -22,7 +22,7 @@
       </q-card-title>
       <q-card-separator></q-card-separator>
       <q-card-main>
-        <q-field v-for="(tagLabel, tagTypeName) in tagTypes" v-if="$nh.getTagsOfType(gallery, tagTypeName).length > 0" label-width="3" :key="tagTypeName" :label="tagLabel + ':'" orientation="horizontal">
+        <q-field dark v-for="(tagLabel, tagTypeName) in tagTypes" v-if="$nh.getTagsOfType(gallery, tagTypeName).length > 0" label-width="3" :key="tagTypeName" :label="tagLabel + ':'" orientation="horizontal">
           <div class="row gutter-xs justify-left">
             <div class="tag-field" v-for="tag in $nh.getTagsOfType(gallery, tagTypeName)" :key="tag.name" v-if="tag.type === tagTypeName">
               <router-link :to="{name: 'search', params: {query: tag.id}, query: { tagged: 'true', prettyTag: tag.name, tagType: tag.type } }">

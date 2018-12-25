@@ -1,9 +1,12 @@
 <template>
-    <q-infinite-scroll :handler="loadMore">
-      <q-pull-to-refresh :handler="refresh">
-        <BookGrid :books="results"></BookGrid>
-    </q-pull-to-refresh>
-    </q-infinite-scroll>
+  <q-infinite-scroll :handler="loadMore">
+    <portal to="toolbar-buttons">
+        <q-btn flat round icon="search" @click="$divineSearch()"/>
+    </portal>
+    <q-pull-to-refresh :handler="refresh">
+      <BookGrid :books="results"></BookGrid>
+  </q-pull-to-refresh>
+  </q-infinite-scroll>
 </template>
 
 <script>

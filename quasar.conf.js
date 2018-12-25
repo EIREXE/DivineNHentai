@@ -78,7 +78,10 @@ module.exports = function (ctx) {
         'QChip',
         'QSpinner',
         'QPullToRefresh',
-        'QSlider'
+        'QSlider',
+        'QSearch',
+        'QCheckbox',
+        'QItemTile'
       ],
       directives: [
         'Ripple'

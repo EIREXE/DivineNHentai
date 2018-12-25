@@ -1,11 +1,11 @@
 <template>
-  <q-page>
+  <q-page :class="{'dark-bg': $divineGetPrimaryColor() === 'dark'}">
     <portal to="footer">
       <div class="q-pa-sm"><q-slider :min="1" @change="changePage" :max="gallery.num_pages" :value="page" :step="1" label color="primary" /></div>
     </portal>
     <template v-if="gallery">
       <div v-if="!loadPlaceHolders" class="row justify-center q-pa-md">
-        <q-spinner slot="message" :size="40"></q-spinner>
+        <q-spinner color="white" slot="message" :size="40"></q-spinner>
       </div>
       <div class="row justify-center q-pa-none">
         <img  @click="imgClick" ref="img" class="page" :src="currentPageURL" @load="onImageLoaded()" alt=""/>
@@ -103,5 +103,8 @@ export default {
 .page {
   width: 100%;
   height: 100%;
+}
+.dark-bg {
+  background-color: #1F1F1F;
 }
 </style>

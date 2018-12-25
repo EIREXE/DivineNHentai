@@ -11,11 +11,14 @@
     <portal to="toolbar-buttons">
         <q-btn flat round icon="edit" @click="$divineSearch(getQuery())"/>
     </portal>
+    <portal to="toolbar-content">
+        <q-search inverted icon="search" dark v-model="searchQuery" color="none" placeholder="Search" />
+    </portal>
     <q-pull-to-refresh :handler="refresh">
       <BookGrid :books="results"></BookGrid>
     </q-pull-to-refresh>
     <div class="row justify-center q-pa-md">
-      <q-spinner slot="message" :size="40"></q-spinner>
+      <q-spinner color="white" slot="message" :size="40"></q-spinner>
     </div>
   </q-infinite-scroll>
 </template>
@@ -28,7 +31,8 @@ export default {
     return {
       results: [],
       page: 0,
-      isTagged: false
+      isTagged: false,
+      searchQuery: ''
     }
   },
   watch: {
@@ -41,6 +45,7 @@ export default {
       this.results = []
       this.page = 0
       this.loadMore(null, done)
+      this.searchQuery = this.getQuery()
     },
     getQuery () {
       if (this.isTagged) {
@@ -53,6 +58,7 @@ export default {
       this.isTagged = this.$route.query.tagged === 'true'
       this.page++
       let searchType = 'search'
+      this.searchQuery = this.getQuery()
       let query = `?query=${this.$route.params.query}`
       if (this.isTagged) {
         searchType = 'tagged'

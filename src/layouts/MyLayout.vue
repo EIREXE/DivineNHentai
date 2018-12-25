@@ -3,7 +3,7 @@
     <q-layout-header reveal :reveal-offset="1">
       <portal-target name="toolbar">
         <q-toolbar
-          color="primary">
+          :color="$divineGetPrimaryColor()">
           <q-btn
             flat
             dense
@@ -13,12 +13,13 @@
           >
             <q-icon name="menu" />
           </q-btn>
-
-          <q-toolbar-title>
-            <portal-target name="title">
-              Divine
-            </portal-target>
-          </q-toolbar-title>
+          <portal-target class="q-toolbar-title" name="toolbar-content">
+            <q-toolbar-title>
+              <portal-target name="title">
+                Divine
+              </portal-target>
+            </q-toolbar-title>
+          </portal-target>
           <portal-target name="toolbar-buttons">
           </portal-target>
         </q-toolbar>
@@ -33,9 +34,10 @@
 
     <q-layout-drawer
       v-model="leftDrawerOpen"
-      :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null"
+      :content-class="$q.theme === 'mat' ? ($divineIsDark() ? 'bg-dark' : 'bg-grey-2') : null"
     >
       <q-list
+        :dark="$divineIsDark()"
         no-border
         link
         inset-delimiter
@@ -56,10 +58,14 @@
           <q-item-side icon="favorite" />
           <q-item-main label="Favorites" />
         </q-item>
+        <q-item exact :to="{ name: 'settings' }">
+          <q-item-side icon="settings" />
+          <q-item-main label="Settings"/>
+        </q-item>
       </q-list>
     </q-layout-drawer>
 
-    <q-page-container>
+    <q-page-container :class="{'dark-bg': $divineGetPrimaryColor() === 'dark'}">
       <router-view />
     </q-page-container>
   </q-layout>
@@ -82,4 +88,7 @@ export default {
 </script>
 
 <style>
+.dark-bg {
+  background-color: #1F1F1F;
+}
 </style>
