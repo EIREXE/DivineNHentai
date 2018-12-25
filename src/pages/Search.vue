@@ -1,5 +1,5 @@
 <template>
-  <q-infinite-scroll :handler="loadMore">
+  <q-infinite-scroll :handler="loadMore" ref="infiniteScroll">
     <portal to="title">
       <template v-if="isTagged">
         {{ $route.query.prettyTag }}
@@ -8,17 +8,30 @@
         {{ $route.params.query }}
       </template>
     </portal>
-    <portal to="toolbar-buttons">
-        <q-btn flat round icon="edit" @click="$divineSearch(getQuery())"/>
+    <portal to="toolbar-buttons" v-if="!isEditingSearch">
+      <q-btn flat round icon="filter_list">
+        <QPopover>
+            <q-list link separator class="scroll" style="min-width: 100px">
+              <q-item
+                v-for="mode in sortModes"
+                :key="mode.value" @click.native="$divineSearch(getQuery(), mode.value)">
+                <q-item-main >
+                  <span class="label" :class="{'text-primary': mode.value === getSortMode()}">{{mode.name}}</span>
+                </q-item-main>
+              </q-item>
+          </q-list>
+        </QPopover>
+      </q-btn>
+      <q-btn flat round icon="edit" @click="isEditingSearch = true"/>
     </portal>
-    <portal to="toolbar-content">
-        <q-search inverted icon="search" dark v-model="searchQuery" color="none" placeholder="Search" />
+    <portal to="toolbar-content" v-if="isEditingSearch">
+        <q-search inverted icon="search" @change="(value) => {$divineSearch(value)}" dark :value="this.getQuery()" color="none" placeholder="Search" />
     </portal>
     <q-pull-to-refresh :handler="refresh">
       <BookGrid :books="results"></BookGrid>
     </q-pull-to-refresh>
     <div class="row justify-center q-pa-md">
-      <q-spinner color="white" slot="message" :size="40"></q-spinner>
+      <q-spinner :color="$divineIsDark ? 'white' : 'primary'" slot="message" :size="40"></q-spinner>
     </div>
   </q-infinite-scroll>
 </template>
@@ -32,7 +45,17 @@ export default {
       results: [],
       page: 0,
       isTagged: false,
-      searchQuery: ''
+      isEditingSearch: false,
+      sortModes: [
+        {
+          name: 'New',
+          value: 'new'
+        },
+        {
+          name: 'Popular',
+          value: 'popular'
+        }
+      ]
     }
   },
   watch: {
@@ -41,11 +64,20 @@ export default {
     }
   },
   methods: {
-    refresh (done) {
+    refresh (done = null) {
       this.results = []
       this.page = 0
-      this.loadMore(null, done)
-      this.searchQuery = this.getQuery()
+      this.isEditingSearch = false
+      if (this.$route.params.query) {
+        this.$refs.infiniteScroll.resume()
+        this.$refs.infiniteScroll.loadMore()
+      } else {
+        this.$refs.infiniteScroll.stop()
+        this.isEditingSearch = true
+      }
+      if (done) {
+        done()
+      }
     },
     getQuery () {
       if (this.isTagged) {
@@ -54,20 +86,47 @@ export default {
         return this.$route.params.query
       }
     },
-    loadMore (index, done) {
-      this.isTagged = this.$route.query.tagged === 'true'
-      this.page++
-      let searchType = 'search'
-      this.searchQuery = this.getQuery()
-      let query = `?query=${this.$route.params.query}`
-      if (this.isTagged) {
-        searchType = 'tagged'
-        query = `?tag_id=${this.$route.params.query}`
+    doSearch (value) {
+      this.$refs.infiniteScroll.reset()
+      this.$router.push({ name: 'search', params: { query: value }, query: { sort: this.getSortMode() } })
+    },
+    setSortMode (value) {
+      if (value !== this.sortMode) {
+        this.sortMode = value
       }
-      this.$nhttp.get(`https://nhentai.net/api/galleries/${searchType}${query}&page=${this.page}`).then((response) => {
-        this.results = this.results.concat(response.data.result)
-        done()
-      })
+    },
+    getSortMode () {
+      if (this.$route.query.sort) {
+        return this.$route.query.sort
+      } else {
+        return 'new'
+      }
+    },
+    loadMore (index, done) {
+      if (!this.$route.params.query) {
+        this.$refs.infiniteScroll.stop()
+        this.isEditingSearch = true
+      } else {
+        this.isTagged = this.$route.query.tagged === 'true'
+        this.page++
+        let searchType = 'search'
+        let query = `?query=${this.$route.params.query}`
+        if (this.isTagged) {
+          searchType = 'tagged'
+          query = `?tag_id=${this.$route.params.query}`
+        }
+
+        let sortString = ''
+        if (this.getSortMode() !== 'new') {
+          sortString = `&sort=${this.getSortMode()}`
+        }
+        this.$nhttp.get(`https://nhentai.net/api/galleries/${searchType}${query}&page=${this.page}${sortString}`).then((response) => {
+          this.results = this.results.concat(response.data.result)
+          if (done) {
+            done()
+          }
+        })
+      }
     }
   }
 }

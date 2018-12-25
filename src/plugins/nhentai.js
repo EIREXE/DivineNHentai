@@ -17,6 +17,14 @@ export default ({ Vue }) => {
   Vue.prototype.$nh.getCover = (book) => {
     return `https://t.nhentai.net/galleries/${book.media_id}/thumb.${getImageFormat(book.images.cover)}`
   }
+  Vue.prototype.$nh.getPage = (book, page) => {
+    if (book.images.pages[page]) {
+      return `https://i.nhentai.net/galleries/${book.media_id}/${page}.${getImageFormat(book.images.pages[page])}`
+    }
+  }
+  Vue.prototype.$nh.getRelatedBooks = (book) => {
+    return `https://nhentai.net/api/gallery/${book.id}/related`
+  }
   Vue.prototype.$nh.getLanguage = (book) => {
     for (let tag of book.tags) {
       if (tag.type === 'language' && tag.name !== 'translated') {

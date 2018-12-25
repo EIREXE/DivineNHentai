@@ -59,7 +59,7 @@ export default {
       this.updateCurrentPageURL()
     },
     updateCurrentPageURL: debounce(function () {
-      this.currentPageURL = this.$nh.getPage(parseInt(this.gallery.media_id), this.page)
+      this.currentPageURL = this.$nh.getPage(this.gallery, this.page)
       console.log('url', this.currentPageURL)
       this.loadPlaceHolders = false
     }, 500),
@@ -83,12 +83,12 @@ export default {
         console.log('new', newPagesToPreload)
         if (oldPagestoPreload > 0) {
           for (let i of [...Array(oldPagestoPreload).keys()]) {
-            pages.push(this.$nh.getPage(parseInt(this.gallery.media_id), this.page - i - 1))
+            pages.push(this.$nh.getPage(this.gallery, this.page - i - 1))
           }
         }
         if (newPagesToPreload > 0) {
           for (let i of [...Array(newPagesToPreload).keys()]) {
-            pages.push(this.$nh.getPage(parseInt(this.gallery.media_id), this.page + i + 1))
+            pages.push(this.$nh.getPage(this.gallery, this.page + i + 1))
           }
         }
       }

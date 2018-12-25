@@ -6,6 +6,9 @@
     <q-pull-to-refresh :handler="refresh">
       <BookGrid :books="results"></BookGrid>
   </q-pull-to-refresh>
+  <div class="row justify-center q-pa-md">
+    <q-spinner :color="$divineIsDark ? 'white' : 'primary'" slot="message" :size="40"></q-spinner>
+  </div>
   </q-infinite-scroll>
 </template>
 
