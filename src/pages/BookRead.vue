@@ -1,7 +1,7 @@
 <template>
   <q-page :class="{'dark-bg': $divineGetPrimaryColor() === 'dark'}">
     <portal to="footer">
-      <div class="q-pa-sm"><q-slider :min="1" @change="changePage" :max="gallery.num_pages" :value="page" :step="1" label color="primary" /></div>
+      <div class="q-pa-sm"><q-slider :min="1" @change="changePage" :max="gallery.num_pages - 1" :value="page" :step="1" label color="primary" /></div>
     </portal>
     <template v-if="gallery">
       <div v-if="!loadPlaceHolders" class="row justify-center q-pa-md">
@@ -43,7 +43,7 @@ export default {
           this.changePage()
         }
       } else {
-        if (this.page < this.gallery.num_pages) {
+        if (this.page < this.gallery.num_pages - 1) {
           this.page++
           this.changePage()
         }
