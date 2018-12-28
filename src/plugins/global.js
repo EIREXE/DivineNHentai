@@ -1,9 +1,11 @@
-import BookGrid from 'pages/BookGrid'
-import BookCard from 'pages/BookCard'
+import BookGrid from 'components/BookGrid'
+import BookCard from 'components/BookCard'
+import LoadingImage from 'components/LoadingImage'
 
 export default ({ Vue, app }) => {
   Vue.component('BookGrid', BookGrid)
   Vue.component('BookCard', BookCard)
+  Vue.component('LoadingImage', LoadingImage)
   Vue.prototype.$divineGetPrimaryColor = function () {
     if (this.$store.state.settings.darkTheme) {
       return 'dark'

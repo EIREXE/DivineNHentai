@@ -65,7 +65,7 @@
       </q-list>
     </q-layout-drawer>
 
-    <q-page-container :class="{'dark-bg': $divineGetPrimaryColor() === 'dark'}">
+    <q-page-container class="page-container" :class="{'dark-bg': $divineGetPrimaryColor() === 'dark'}">
       <router-view />
     </q-page-container>
   </q-layout>
@@ -90,5 +90,9 @@ export default {
 <style>
 .dark-bg {
   background-color: #1F1F1F;
+}
+
+.page-container {
+  padding-bottom: 0px !important;
 }
 </style>

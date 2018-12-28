@@ -19,7 +19,7 @@ export default ({ Vue }) => {
   }
   Vue.prototype.$nh.getPage = (book, page) => {
     if (book.images.pages[page]) {
-      return `https://i.nhentai.net/galleries/${book.media_id}/${page}.${getImageFormat(book.images.pages[page])}`
+      return `https://i.nhentai.net/galleries/${book.media_id}/${page + 1}.${getImageFormat(book.images.pages[page])}`
     }
   }
   Vue.prototype.$nh.getPageThumb = (book, page) => {

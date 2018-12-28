@@ -1,17 +1,30 @@
 <template>
   <q-page :class="{'dark-bg': $divineGetPrimaryColor() === 'dark'}">
     <portal to="footer">
-      <div class="q-pa-sm"><q-slider :min="1" @change="changePage" :max="gallery.num_pages - 1" :value="page" :step="1" label color="primary" /></div>
+      <div class="q-pa-sm"><q-slider :min="0" @change="changePage" :max="gallery.num_pages - 1" :value="page" :step="1" label color="primary" /></div>
     </portal>
-    <template v-if="gallery">
-      <div v-if="!loadPlaceHolders" class="row justify-center q-pa-md">
-        <q-spinner color="white" slot="message" :size="40"></q-spinner>
-      </div>
-      <div class="row justify-center q-pa-none">
-        <img  @click="imgClick" ref="img" class="page" :src="currentPageURL" @load="onImageLoaded()" alt=""/>
-      </div>
-    </template>
-  <image-preloader v-if="loadPlaceHolders" v-for="p in getPagesToPreload()" :key="p" :src="p"/>
+    <q-carousel v-if="gallery"
+      v-model="page"
+      color="white"
+      infinite
+      class="q-pa-none"
+      height="full-height"
+    >
+      <q-carousel-slide class="q-pa-none" v-for="(page, i) in gallery.images.pages" :key="i" >
+        <LoadingImage @imgClick="imgClick" class="book-page" :src="$nh.getPage(gallery, i)"/>
+      </q-carousel-slide>
+
+      <q-btn
+        slot="quick-nav"
+        slot-scope="props"
+        color="white"
+        flat
+        dense
+        :label="`${props.slide + 1}`"
+        @click="props.goToSlide()"
+        :class="{inactive: !props.current}"
+      />
+    </q-carousel>
   </q-page>
 </template>
 
@@ -22,12 +35,14 @@ export default {
   name: 'BookRead',
   data () {
     return {
-      page: this.$route.query.initialPage || 1,
+      page: this.$route.query.initialPage || 0,
       loadPlaceHolders: false,
-      currentPageURL: ''
+      currentPageURL: '',
+      carouselHeight: 0
     }
   },
   created () {
+    console.log(this.gallery)
     this.updateCurrentPageURL()
     this.addBookToHistory(this.gallery)
   },
@@ -36,35 +51,29 @@ export default {
     ...mapActions('userData', [
       'addBookToHistory'
     ]),
-    imgClick (event) {
-      if (event.layerX < this.$refs.img.getBoundingClientRect().width / 2) {
-        if (this.page > 1) {
-          this.page--
-          this.changePage()
+    imgClick (event, img) {
+      if (event.clientX < img.getBoundingClientRect().width / 2) {
+        if (this.page > 0) {
+          this.changePage(this.page - 1)
         }
       } else {
         if (this.page < this.gallery.num_pages - 1) {
-          this.page++
-          this.changePage()
+          this.changePage(this.page + 1)
         }
       }
     },
     changePage (newPage = null) {
-      console.log('new page', newPage)
-      if (newPage) {
+      if (newPage >= 0) {
         this.page = newPage
       }
-      console.log('change page')
       window.scrollTo(0, 0)
       this.updateCurrentPageURL()
     },
     updateCurrentPageURL: debounce(function () {
       this.currentPageURL = this.$nh.getPage(this.gallery, this.page)
-      console.log('url', this.currentPageURL)
       this.loadPlaceHolders = false
     }, 500),
     onImageLoaded () {
-      console.log('image loaded, loading placeholders...')
       this.loadPlaceHolders = true
     },
     getPagesToPreload () {
@@ -74,13 +83,11 @@ export default {
         let oldPagestoPreload = PAGES_TO_PRELOAD
         if (oldPagestoPreload > this.page) {
           oldPagestoPreload = PAGES_TO_PRELOAD - (PAGES_TO_PRELOAD - this.page) - 1
-          console.log('old', oldPagestoPreload)
         }
         let newPagesToPreload = PAGES_TO_PRELOAD
         if ((this.gallery.num_pages - this.page) < newPagesToPreload) {
           newPagesToPreload = PAGES_TO_PRELOAD - (PAGES_TO_PRELOAD - (this.gallery.num_pages - this.page)) - 1
         }
-        console.log('new', newPagesToPreload)
         if (oldPagestoPreload > 0) {
           for (let i of [...Array(oldPagestoPreload).keys()]) {
             pages.push(this.$nh.getPage(this.gallery, this.page - i - 1))
@@ -92,7 +99,6 @@ export default {
           }
         }
       }
-      console.log(pages)
       return pages
     }
   }
@@ -106,5 +112,9 @@ export default {
 }
 .dark-bg {
   background-color: #1F1F1F;
+}
+
+.book-page {
+  width: 100% !important;
 }
 </style>
