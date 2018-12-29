@@ -75,12 +75,13 @@ export default {
     }
   },
   props: ['gallery'],
+  watch: {
+    '$route' (to, from) {
+      this.fetchData()
+    }
+  },
   created () {
-    console.log('related', this.$nh.getRelatedBooks(this.gallery))
-    this.$nhttp.get(this.$nh.getRelatedBooks(this.gallery)).then((result) => {
-      console.log(result.data.result)
-      this.related = result.data.result
-    })
+    this.fetchData()
   },
   computed: {
     ...mapState({
@@ -89,6 +90,13 @@ export default {
   },
   methods: {
     ...mapActions('userData', ['addBookToFavorites', 'removeBookFromFavorites']),
+    fetchData () {
+      console.log('related', this.$nh.getRelatedBooks(this.gallery))
+      this.$nhttp.get(this.$nh.getRelatedBooks(this.gallery)).then((result) => {
+        console.log(result.data.result)
+        this.related = result.data.result
+      })
+    },
     isInFavorites (book) {
       for (let book of this.favoriteBooks) {
         console.log('favs', book)
