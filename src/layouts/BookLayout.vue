@@ -20,8 +20,9 @@ export default {
   methods: {
     openURL,
     fetchData () {
-      this.$nhttp.get(`https://nhentai.net/api/gallery/${this.$route.params.id}`).then((response) => {
-        this.gallery = response.data
+      this.$nhttp.get(`https://nhentai.net/g/${this.$route.params.id}/`).then((response) => {
+        this.gallery = this.$nh.parseNhentaiGallery(response.data)
+        this.gallery.related = this.$nh.parseNhentaiList(response.data)
       })
     }
   },

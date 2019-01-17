@@ -37,7 +37,7 @@
         <q-field dark v-for="(tagLabel, tagTypeName) in tagTypes" v-if="$nh.getTagsOfType(gallery, tagTypeName).length > 0" label-width="3" :key="tagTypeName" :label="tagLabel + ':'" orientation="horizontal">
           <div class="row gutter-xs justify-left">
             <div class="tag-field" v-for="tag in $nh.getTagsOfType(gallery, tagTypeName)" :key="tag.name" v-if="tag.type === tagTypeName">
-              <router-link :to="{name: 'search', params: {query: tag.id}, query: { tagged: 'true', prettyTag: tag.name, tagType: tag.type } }">
+              <router-link :to="{name: 'search', params: { query: getTagNameURL(tag.name) }, query: { tagged: 'true', prettyTag: tag.name, tagType: tag.type } }">
                 <q-chip color="primary">{{ tag.name }}</q-chip>
               </router-link>
             </div>
@@ -46,7 +46,7 @@
         <q-field label="Related" orientation="vertical">
           <div class="related-books">
             <div class="row no-wrap">
-              <BookCard v-for="book in related" :key="book.id" class="col-xs-6 col-sm-3 q-pa-sm" :book="book"/>
+              <BookCard v-for="book in gallery.related" :key="book.id" class="col-xs-6 col-sm-3 q-pa-sm" :book="book"/>
             </div>
           </div>
         </q-field>
@@ -91,11 +91,15 @@ export default {
   methods: {
     ...mapActions('userData', ['addBookToFavorites', 'removeBookFromFavorites']),
     fetchData () {
-      console.log('related', this.$nh.getRelatedBooks(this.gallery))
+      /*
       this.$nhttp.get(this.$nh.getRelatedBooks(this.gallery)).then((result) => {
         console.log(result.data.result)
         this.related = result.data.result
       })
+      */
+    },
+    getTagNameURL (tagName) {
+      return tagName.replace(/ /g, '-')
     },
     isInFavorites (book) {
       for (let book of this.favoriteBooks) {

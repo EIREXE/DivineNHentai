@@ -2,7 +2,7 @@
   <q-infinite-scroll :handler="loadMore" ref="infiniteScroll">
     <portal to="title">
       <template v-if="isTagged">
-        {{ $route.query.prettyTag }}
+        {{ capitalizeFirstLetter($route.query.tagType) }}: {{ $route.query.prettyTag }}
       </template>
       <template v-else>
         {{ $route.params.query }}
@@ -102,6 +102,9 @@ export default {
         return 'new'
       }
     },
+    capitalizeFirstLetter (str) {
+      return str.charAt(0).toUpperCase() + str.slice(1)
+    },
     loadMore (index, done) {
       if (!this.$route.params.query) {
         this.$refs.infiniteScroll.stop()
@@ -110,18 +113,28 @@ export default {
         this.isTagged = this.$route.query.tagged === 'true'
         this.page++
         let searchType = 'search'
-        let query = `?query=${this.$route.params.query}`
+        let query = `${this.$route.params.query}`
         if (this.isTagged) {
           searchType = 'tagged'
-          query = `?tag_id=${this.$route.params.query}`
         }
 
-        let sortString = ''
-        if (this.getSortMode() !== 'new') {
-          sortString = `&sort=${this.getSortMode()}`
+        var url = ''
+        if (searchType === 'search') {
+          url = `https://nhentai.net/search/?q=${query}`
+          if (this.getSortMode() !== 'new') {
+            url += `&sort=${this.getSortMode()}`
+          }
+          url += `&page=${this.page}`
+        } else {
+          url = `https://nhentai.net/${this.$route.query.tagType}/${this.$route.params.query}/`
+          if (this.getSortMode() !== 'new') {
+            url += this.getSortMode() + '/'
+          }
+          url += `?page=${this.page}`
         }
-        this.$nhttp.get(`https://nhentai.net/api/galleries/${searchType}${query}&page=${this.page}${sortString}`).then((response) => {
-          this.results = this.results.concat(response.data.result)
+        console.log(url)
+        this.$nhttp.get(url).then((response) => {
+          this.results = this.results.concat(this.$nh.parseNhentaiList(response.data))
           if (done) {
             done()
           }

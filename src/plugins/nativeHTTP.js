@@ -1,5 +1,4 @@
 function parseResponse (response) {
-  response.data = JSON.parse(response.data)
   return response
 }
 export default ({ Vue }) => {

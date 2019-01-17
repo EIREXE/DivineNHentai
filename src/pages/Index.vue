@@ -31,8 +31,8 @@ export default {
     },
     loadMore (index, done) {
       this.page++
-      this.$nhttp.get(`https://nhentai.net/api/galleries/all?page=${this.page}`).then((response) => {
-        this.results = this.results.concat(response.data.result)
+      this.$nhttp.get(`https://nhentai.net/?page=${this.page}`).then((response) => {
+        this.results = this.results.concat(this.$nh.parseNhentaiList(response.data))
         done()
       })
     }

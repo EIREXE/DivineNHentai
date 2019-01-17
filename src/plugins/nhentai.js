@@ -1,5 +1,5 @@
 import NHentai from 'nhentai-api'
-
+import JSSoup from 'jssoup'
 function getImageFormat (imageData) {
   if (imageData.t === 'j') {
     return 'jpg'
@@ -7,7 +7,6 @@ function getImageFormat (imageData) {
     return 'png'
   }
 }
-
 export default ({ Vue }) => {
   console.log(new NHentai(true))
   Vue.prototype.$nh = new NHentai(true)
@@ -57,5 +56,90 @@ export default ({ Vue }) => {
     }
 
     return tags
+  }
+  Vue.prototype.$nh.parseNhentaiGallery = (text) => {
+    let soup = new JSSoup(text)
+    let scripts = soup.findAll('script')
+    for (let script of scripts) {
+      let scriptText = script.text.trim()
+      if (scriptText.startsWith('var gallery')) {
+        scriptText = scriptText.split('var gallery = new N.gallery(')[1]
+        scriptText = scriptText.split(');')[0]
+        return JSON.parse(scriptText)
+      }
+    }
+  }
+
+  Vue.prototype.$nh.parseNhentaiList = (text) => {
+    let soup = new JSSoup(text)
+    let galleries = soup.findAll('div', 'gallery')
+    var results = []
+
+    var id2lang = {
+      '6346': 'japanese',
+      '12227': 'english',
+      '29963': 'chinese'
+    }
+
+    for (let gallery of galleries) {
+      let cover = gallery.contents[0]
+      console.log(cover)
+      let img = cover.contents[0]
+      let mediaId
+      if ('data-src' in img.attrs) {
+        mediaId = img.attrs['data-src'].split('/')
+      } else {
+        mediaId = img.attrs['src'].split('/')
+      }
+      mediaId = parseInt(mediaId[mediaId.length - 2])
+
+      let tags = gallery.attrs['data-tags'].split(' ')
+      var langKeys = Object.keys(id2lang)
+      var language = 'english'
+      for (let tag of tags) {
+        if (langKeys.includes(tag)) {
+          language = id2lang[tag]
+        }
+      }
+
+      let title = ''
+      title = cover.contents[2]
+      if (!title) {
+        title = cover.contents[1]
+      }
+      title = title.text
+      var format
+      if ('data-src' in img.attrs) {
+        format = img.attrs['data-src'].split('.')
+      } else {
+        format = img.attrs['src'].split('.')
+      }
+      format = format[format.length - 1]
+      if (format === 'jpg') {
+        format = 'j'
+      } else {
+        format = 'p'
+      }
+      let result = {
+        id: parseInt(cover.attrs.href.split('/')[2]),
+        media_id: mediaId,
+        images: {
+          thumbnail: {
+            t: format
+          }
+        },
+        title: {
+          english: title
+        },
+        tags: [
+          {
+            type: 'language',
+            name: language
+          }
+        ]
+      }
+      results.push(result)
+    }
+    return results
   }
 }
